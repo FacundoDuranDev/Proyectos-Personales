@@ -1,0 +1,27 @@
+{% extends "encyclopedia/layout.html" %}
+
+{% block title %}
+    Encyclopedia
+{% endblock %}
+
+{% block body %}
+    
+    {% if search %}
+        <h2>Searching for {{ value.capitalize }}</h2>
+    {% else %}
+        <h1>All Pages</h1>        
+    {% endif %}
+    <ul>
+        
+            {% for entry in entries %}
+                {% if entry is not None %}
+                    <a href = "/wiki/{{ entry }}" ><li>{{ entry }}</li></a>
+                {% else %}
+                   <li> <p>Seems like {{ value.capitalize }} page does not exists.</p></li>
+                   You can <a href="{% url 'newEntry' %}">click Here</a> to create a new entry.
+                {% endif %}
+            {% endfor %}
+        
+    </ul>
+
+{% endblock %}
