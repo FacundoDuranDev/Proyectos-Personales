@@ -1,0 +1,95 @@
+body {
+    padding:0px;
+    background-color:white
+    
+}
+.barnav{
+    text-align:center;
+    background-color: black;
+    color:white;
+    border-bottom-right-radius: 30px;
+    border-bottom-left-radius: 30px;
+    padding-top: 25px;
+    
+}
+.barnav h1, .barnav div{
+    position: relative;
+    padding-left: 14px;    
+}
+.barnav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow:hidden;
+    top:30px;
+    width: 100%;
+}
+
+.barnav li{
+    text-align:center;
+    float: left;
+}
+.barnav a {
+    display: block;
+    color: white;
+    text-align: center;
+    box-sizing: border-box;
+    padding:25px 115.9px;
+    text-decoration: none;
+}
+.first:hover{
+    background-color: rgba(97, 99, 98, 0.459);
+    border-bottom-left-radius: 30px;
+}
+.barnav li:hover{
+    background-color: rgba(97, 99, 98, 0.459);
+}
+.container{
+    position: relative;
+    top: 20px;
+    margin: 0;
+    padding: 20px;
+    left: 35%;
+}
+#box{
+    left: 400px;
+}
+#listing{
+    top: 20px;
+    margin: 0;
+    padding: 20px;
+    left: 35%;
+}
+.last:hover{
+    background-color: rgba(97, 99, 98, 0.459);
+    border-bottom-right-radius: 30px;
+}
+
+.categpage{
+    font-size: x-large;
+    color: gray;
+    left: 45%
+}
+.categpage:hover{
+    font-size:30px;
+    transition: 0.3s
+}
+#categories{
+    left: 45%
+}
+.items{
+    position: relative;
+    top: 20px;
+    margin: 0;
+    padding: 20px;
+}
+#winner{
+    font-size: 2rem;
+    color: black;
+}
+.login{
+    width: 300px;
+    position: absolute;
+    left: 45%;
+    top: 35%;
+}
