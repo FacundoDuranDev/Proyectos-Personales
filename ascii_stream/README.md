@@ -146,4 +146,26 @@ Para manos:
 python -m pip install mediapipe
 ```
 
+## Arquitectura modular (StreamEngine)
+Si queres extender el proceso completo, podes usar el motor modular:
+
+```python
+from ascii_stream import (
+    StreamEngine,
+    OpenCVCameraSource,
+    AsciiRenderer,
+    UdpFfmpegSink,
+    AnalyzerPipeline,
+    FaceHaarAnalyzer,
+)
+
+engine = StreamEngine(
+    source=OpenCVCameraSource(0),
+    renderer=AsciiRenderer(),
+    sink=UdpFfmpegSink(),
+    analyzers=AnalyzerPipeline([FaceHaarAnalyzer()]),
+)
+engine.start()
+```
+
 Nota: cambios en grid_w/grid_h/host/port/fps requieren reiniciar el stream.
