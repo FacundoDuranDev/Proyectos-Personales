@@ -1,4 +1,10 @@
 from .ascii_streamer import AsciiStreamer
+from .analyzers import (
+    AnalyzerPipeline,
+    FaceHaarAnalyzer,
+    FrameAnalyzer,
+    MediaPipeHandAnalyzer,
+)
 from .base import Streamer
 from .config import AsciiStreamConfig
 from .constants import ASCII_SETS
@@ -21,5 +27,9 @@ __all__ = [
     "GrayscaleFilter",
     "ContrastBrightnessFilter",
     "InvertFilter",
+    "AnalyzerPipeline",
+    "FrameAnalyzer",
+    "FaceHaarAnalyzer",
+    "MediaPipeHandAnalyzer",
     "ASCII_SETS",
 ]

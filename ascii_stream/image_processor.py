@@ -1,4 +1,4 @@
-from typing import Iterable, List, Optional
+from typing import Iterable, List, Optional, Tuple
 
 import cv2
 import numpy as np
@@ -52,15 +52,17 @@ class AsciiImageProcessor:
     def add_filter(self, filter_obj: FrameFilter) -> None:
         self._pipeline.append(filter_obj)
 
-    def output_size(self, config: AsciiStreamConfig) -> tuple[int, int]:
+    def output_size(self, config: AsciiStreamConfig) -> Tuple[int, int]:
         return config.grid_w * self._char_w, config.grid_h * self._char_h
 
-    def render(self, frame: np.ndarray, config: AsciiStreamConfig) -> Image.Image:
+    def render(
+        self, frame: np.ndarray, config: AsciiStreamConfig, analysis: Optional[dict] = None
+    ) -> Image.Image:
         filters = self._pipeline.snapshot()
 
         processed = frame
         for filter_obj in filters:
-            processed = filter_obj.apply(processed, config)
+            processed = filter_obj.apply(processed, config, analysis)
 
         if processed.ndim == 3:
             processed = cv2.cvtColor(processed, cv2.COLOR_BGR2GRAY)

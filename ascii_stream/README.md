@@ -122,4 +122,28 @@ with streamer.pipeline.locked() as filters:
     filters.append(EdgeFilter())
 ```
 
+## Analizadores (rostros y manos)
+El streamer tambien expone una lista mutable de analizadores para obtener datos
+en tiempo real (rostros, manos, etc.):
+
+```python
+from ascii_stream import AsciiStreamer, FaceHaarAnalyzer, MediaPipeHandAnalyzer
+
+streamer = AsciiStreamer()
+streamer.start()
+
+# Deteccion de rostros (OpenCV)
+streamer.analyzers.append(FaceHaarAnalyzer())
+
+# Manos con MediaPipe (requiere install opcional)
+streamer.analyzers.append(MediaPipeHandAnalyzer())
+
+print(streamer.get_last_analysis())
+```
+
+Para manos:
+```
+python -m pip install mediapipe
+```
+
 Nota: cambios en grid_w/grid_h/host/port/fps requieren reiniciar el stream.

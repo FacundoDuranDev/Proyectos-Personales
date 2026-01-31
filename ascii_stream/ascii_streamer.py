@@ -1,10 +1,11 @@
 import subprocess
 import threading
 import time
-from typing import List, Optional
+from typing import Dict, List, Optional
 
 import cv2
 
+from .analyzers import AnalyzerPipeline, FrameAnalyzer
 from .base import Streamer
 from .config import AsciiStreamConfig
 from .filters import FilterPipeline, FrameFilter
@@ -48,6 +49,9 @@ class AsciiStreamer(Streamer):
         self._config = config or AsciiStreamConfig()
         self._config_lock = threading.Lock()
         self._image_processor = image_processor or AsciiImageProcessor()
+        self._analyzers = AnalyzerPipeline()
+        self._analysis_lock = threading.Lock()
+        self._last_analysis: Dict[str, object] = {}
 
     def get_config(self) -> AsciiStreamConfig:
         with self._config_lock:
@@ -74,6 +78,18 @@ class AsciiStreamer(Streamer):
     def filters(self) -> List[FrameFilter]:
         return self._image_processor.pipeline.filters
 
+    @property
+    def analyzer_pipeline(self) -> AnalyzerPipeline:
+        return self._analyzers
+
+    @property
+    def analyzers(self) -> List[FrameAnalyzer]:
+        return self._analyzers.analyzers
+
+    def get_last_analysis(self) -> Dict[str, object]:
+        with self._analysis_lock:
+            return dict(self._last_analysis)
+
     def start(self, camera_index: int = 0) -> None:
         super().start(camera_index=camera_index)
 
@@ -94,7 +110,14 @@ class AsciiStreamer(Streamer):
                     continue
 
                 cfg = self.get_config()
-                img = self._image_processor.render(frame, cfg)
+                analysis = (
+                    self._analyzers.run(frame, cfg)
+                    if self._analyzers.has_any()
+                    else {}
+                )
+                with self._analysis_lock:
+                    self._last_analysis = analysis
+                img = self._image_processor.render(frame, cfg, analysis)
 
                 try:
                     if proc.stdin:
