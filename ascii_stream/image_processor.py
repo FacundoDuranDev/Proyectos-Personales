@@ -1,4 +1,3 @@
-import threading
 from typing import Iterable, List, Optional
 
 import cv2
@@ -7,45 +6,57 @@ from PIL import Image, ImageDraw, ImageFont
 
 from .config import AsciiStreamConfig
 from .constants import resolve_charset
-from .filters import ContrastBrightnessFilter, FrameFilter, GrayscaleFilter, InvertFilter
+from .filters import (
+    ContrastBrightnessFilter,
+    FilterPipeline,
+    FrameFilter,
+    GrayscaleFilter,
+    InvertFilter,
+)
 
 
 class AsciiImageProcessor:
     def __init__(
         self,
+        pipeline: Optional[FilterPipeline] = None,
         filters: Optional[Iterable[FrameFilter]] = None,
         font: Optional[ImageFont.ImageFont] = None,
     ) -> None:
-        self._filters: List[FrameFilter] = list(filters) if filters is not None else [
-            GrayscaleFilter(),
-            ContrastBrightnessFilter(),
-            InvertFilter(),
-        ]
-        self._filters_lock = threading.Lock()
+        if pipeline is not None and filters is not None:
+            raise ValueError("Usar pipeline o filters, no ambos.")
+        if pipeline is None:
+            if filters is None:
+                filters = [
+                    GrayscaleFilter(),
+                    ContrastBrightnessFilter(),
+                    InvertFilter(),
+                ]
+            pipeline = FilterPipeline(filters)
+        self._pipeline = pipeline
         self._font = font or ImageFont.load_default()
         bbox = self._font.getbbox("A")
         self._char_w = bbox[2] - bbox[0]
         self._char_h = bbox[3] - bbox[1]
 
     @property
+    def pipeline(self) -> FilterPipeline:
+        return self._pipeline
+
+    @property
     def filters(self) -> List[FrameFilter]:
-        with self._filters_lock:
-            return list(self._filters)
+        return self._pipeline.filters
 
     def set_filters(self, filters: Iterable[FrameFilter]) -> None:
-        with self._filters_lock:
-            self._filters = list(filters)
+        self._pipeline.replace(filters)
 
     def add_filter(self, filter_obj: FrameFilter) -> None:
-        with self._filters_lock:
-            self._filters.append(filter_obj)
+        self._pipeline.append(filter_obj)
 
     def output_size(self, config: AsciiStreamConfig) -> tuple[int, int]:
         return config.grid_w * self._char_w, config.grid_h * self._char_h
 
     def render(self, frame: np.ndarray, config: AsciiStreamConfig) -> Image.Image:
-        with self._filters_lock:
-            filters = list(self._filters)
+        filters = self._pipeline.snapshot()
 
         processed = frame
         for filter_obj in filters:

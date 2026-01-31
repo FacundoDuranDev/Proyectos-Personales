@@ -2,7 +2,13 @@ from .ascii_streamer import AsciiStreamer
 from .base import Streamer
 from .config import AsciiStreamConfig
 from .constants import ASCII_SETS
-from .filters import ContrastBrightnessFilter, FrameFilter, GrayscaleFilter, InvertFilter
+from .filters import (
+    ContrastBrightnessFilter,
+    FilterPipeline,
+    FrameFilter,
+    GrayscaleFilter,
+    InvertFilter,
+)
 from .image_processor import AsciiImageProcessor
 
 __all__ = [
@@ -10,6 +16,7 @@ __all__ = [
     "AsciiStreamer",
     "AsciiStreamConfig",
     "AsciiImageProcessor",
+    "FilterPipeline",
     "FrameFilter",
     "GrayscaleFilter",
     "ContrastBrightnessFilter",

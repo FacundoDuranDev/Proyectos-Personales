@@ -104,4 +104,22 @@ streamer = AsciiStreamer(image_processor=processor)
 streamer.start()
 ```
 
+La lista de filtros es mutable en el gestor principal:
+```python
+from ascii_stream import AsciiStreamer
+
+streamer = AsciiStreamer()
+streamer.start()
+
+# Agregar o quitar filtros en caliente
+streamer.filters.append(EdgeFilter())
+streamer.filters.pop()
+```
+
+Si queres sincronizacion, usa el pipeline con lock:
+```python
+with streamer.pipeline.locked() as filters:
+    filters.append(EdgeFilter())
+```
+
 Nota: cambios en grid_w/grid_h/host/port/fps requieren reiniciar el stream.

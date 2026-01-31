@@ -1,12 +1,13 @@
 import subprocess
 import threading
 import time
-from typing import Optional
+from typing import List, Optional
 
 import cv2
 
 from .base import Streamer
 from .config import AsciiStreamConfig
+from .filters import FilterPipeline, FrameFilter
 from .image_processor import AsciiImageProcessor
 
 
@@ -64,6 +65,14 @@ class AsciiStreamer(Streamer):
 
     def set_processor(self, processor: AsciiImageProcessor) -> None:
         self._image_processor = processor
+
+    @property
+    def pipeline(self) -> FilterPipeline:
+        return self._image_processor.pipeline
+
+    @property
+    def filters(self) -> List[FrameFilter]:
+        return self._image_processor.pipeline.filters
 
     def start(self, camera_index: int = 0) -> None:
         super().start(camera_index=camera_index)
