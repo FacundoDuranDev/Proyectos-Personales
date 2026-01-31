@@ -83,4 +83,25 @@ for w in [contrast, brightness, invert]:
 display(contrast, brightness, invert)
 ```
 
+## Filtros y procesamiento (extensible)
+La gestion de imagen vive en `AsciiImageProcessor` y acepta filtros encadenables.
+
+```python
+import cv2
+from ascii_stream import AsciiImageProcessor, AsciiStreamer, FrameFilter
+
+
+class EdgeFilter:
+    def apply(self, frame, config):
+        gray = frame if frame.ndim == 2 else cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        return cv2.Canny(gray, 80, 160)
+
+
+processor = AsciiImageProcessor()
+processor.add_filter(EdgeFilter())
+
+streamer = AsciiStreamer(image_processor=processor)
+streamer.start()
+```
+
 Nota: cambios en grid_w/grid_h/host/port/fps requieren reiniciar el stream.

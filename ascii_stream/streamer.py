@@ -1,6 +1,7 @@
 import time
 
-from .ascii_streamer import AsciiStreamConfig, AsciiStreamer
+from .ascii_streamer import AsciiStreamer
+from .config import AsciiStreamConfig
 
 
 def _parse_args():
