@@ -87,4 +87,7 @@ build_control_panel(engine)
 
 ## Notas
 - Cambios en grid_w/grid_h/host/port requieren reiniciar el engine.
-- Para broadcast en LAN: host="255.255.255.255"
+- Para broadcast en LAN:
+  ```python
+  config = EngineConfig(host="192.168.1.255", udp_broadcast=True)
+  ```

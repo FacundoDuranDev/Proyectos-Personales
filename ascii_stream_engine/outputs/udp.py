@@ -14,11 +14,13 @@ class FfmpegUdpOutput:
         port: Optional[int] = None,
         pkt_size: Optional[int] = None,
         bitrate: Optional[str] = None,
+        broadcast: Optional[bool] = None,
     ) -> None:
         self._host = host
         self._port = port
         self._pkt_size = pkt_size
         self._bitrate = bitrate
+        self._broadcast = broadcast
         self._proc: Optional[subprocess.Popen] = None
 
     def open(self, config: EngineConfig, output_size: Tuple[int, int]) -> None:
@@ -27,7 +29,13 @@ class FfmpegUdpOutput:
         port = self._port or config.port
         pkt_size = self._pkt_size or config.pkt_size
         bitrate = self._bitrate or config.bitrate
+        broadcast = (
+            self._broadcast if self._broadcast is not None else config.udp_broadcast
+        )
         out_w, out_h = output_size
+        url = f"udp://{host}:{port}?pkt_size={pkt_size}"
+        if broadcast:
+            url += "&broadcast=1"
         cmd = [
             "ffmpeg",
             "-loglevel",
@@ -49,7 +57,7 @@ class FfmpegUdpOutput:
             bitrate,
             "-f",
             "mpegts",
-            f"udp://{host}:{port}?pkt_size={pkt_size}",
+            url,
         ]
         self._proc = subprocess.Popen(cmd, stdin=subprocess.PIPE)
 

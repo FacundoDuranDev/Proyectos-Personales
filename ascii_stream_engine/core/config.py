@@ -14,5 +14,6 @@ class EngineConfig:
     port: int = 1234
     pkt_size: int = 1316
     bitrate: str = "1500k"
+    udp_broadcast: bool = False
     frame_buffer_size: int = 2
     sleep_on_empty: float = 0.01

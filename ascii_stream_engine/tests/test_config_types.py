@@ -18,6 +18,7 @@ class TestConfigAndTypes(unittest.TestCase):
         self.assertEqual(config.port, 1234)
         self.assertEqual(config.pkt_size, 1316)
         self.assertEqual(config.bitrate, "1500k")
+        self.assertEqual(config.udp_broadcast, False)
         self.assertEqual(config.frame_buffer_size, 2)
         self.assertEqual(config.sleep_on_empty, 0.01)
 
