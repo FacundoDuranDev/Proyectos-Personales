@@ -156,6 +156,14 @@ class StreamEngine:
         self._start_capture_thread(cfg)
         output_size = self._renderer.output_size(cfg)
         self._sink.open(cfg, output_size)
+        sink_signature = (
+            output_size,
+            cfg.fps,
+            cfg.host,
+            cfg.port,
+            cfg.pkt_size,
+            cfg.bitrate,
+        )
 
         last = time.perf_counter()
         try:
@@ -174,6 +182,20 @@ class StreamEngine:
                     timestamp = time.time()
 
                 cfg = self.get_config()
+                desired_output_size = self._renderer.output_size(cfg)
+                desired_signature = (
+                    desired_output_size,
+                    cfg.fps,
+                    cfg.host,
+                    cfg.port,
+                    cfg.pkt_size,
+                    cfg.bitrate,
+                )
+                if desired_signature != sink_signature:
+                    self._safe_close_sink()
+                    self._sink.open(cfg, desired_output_size)
+                    sink_signature = desired_signature
+
                 analysis = (
                     self._analyzers.run(frame, cfg)
                     if self._analyzers.has_any()
