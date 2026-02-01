@@ -59,6 +59,14 @@ filters = FilterPipeline([BrightnessFilter(), InvertFilter()])
 analyzers = AnalyzerPipeline([FaceHaarAnalyzer()])
 ```
 
+## Tip: fuente monoespaciada (mejor alineado)
+Si ves el ASCII pegado a la izquierda, usa una fuente monoespaciada:
+```python
+from ascii_stream_engine.renderer import AsciiRenderer
+
+renderer = AsciiRenderer(font_path="/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf")
+```
+
 ## Control en Jupyter
 Si corres el notebook dentro de `ascii_stream_engine/examples`, agrega el path
 del repo para que Python encuentre el paquete:

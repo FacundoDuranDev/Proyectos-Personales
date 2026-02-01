@@ -1,3 +1,4 @@
+import os
 from typing import List, Optional, Tuple
 
 import cv2
@@ -9,11 +10,42 @@ from ..core.types import RenderFrame
 
 
 class AsciiRenderer:
-    def __init__(self, font: Optional[ImageFont.ImageFont] = None) -> None:
-        self._font = font or ImageFont.load_default()
-        bbox = self._font.getbbox("A")
+    def __init__(
+        self,
+        font: Optional[ImageFont.ImageFont] = None,
+        font_path: Optional[str] = None,
+        font_size: int = 12,
+    ) -> None:
+        if font is not None and font_path is not None:
+            raise ValueError("Usa font o font_path, no ambos.")
+        if font is None:
+            font = self._load_font(font_path, font_size)
+        self._font = font
+        bbox = self._font.getbbox("M")
         self._char_w = bbox[2] - bbox[0]
         self._char_h = bbox[3] - bbox[1]
+
+    def _load_font(
+        self, font_path: Optional[str], font_size: int
+    ) -> ImageFont.ImageFont:
+        if font_path:
+            try:
+                return ImageFont.truetype(font_path, font_size)
+            except Exception:
+                pass
+
+        candidates = [
+            "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf",
+            "/usr/share/fonts/truetype/liberation/LiberationMono-Regular.ttf",
+            "/usr/share/fonts/truetype/freefont/FreeMono.ttf",
+        ]
+        for path in candidates:
+            if os.path.exists(path):
+                try:
+                    return ImageFont.truetype(path, font_size)
+                except Exception:
+                    continue
+        return ImageFont.load_default()
 
     def output_size(self, config: EngineConfig) -> Tuple[int, int]:
         return config.grid_w * self._char_w, config.grid_h * self._char_h
