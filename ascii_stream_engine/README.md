@@ -85,6 +85,12 @@ from ascii_stream_engine import build_control_panel
 build_control_panel(engine)
 ```
 
+## Modo RAW (sin ASCII)
+Para enviar imagen sin ASCII, usa `render_mode="raw"`:
+```python
+config = EngineConfig(render_mode="raw", raw_width=640, raw_height=360)
+```
+
 ## Notas
 - Cambios en grid_w/grid_h/host/port requieren reiniciar el engine.
 - Para broadcast en LAN:

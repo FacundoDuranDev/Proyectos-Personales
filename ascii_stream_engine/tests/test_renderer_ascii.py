@@ -23,6 +23,21 @@ class TestAsciiRenderer(unittest.TestCase):
         self.assertEqual(len(result.lines[0]), config.grid_w)
         self.assertIn("\n", result.text)
 
+    def test_render_raw(self) -> None:
+        import numpy as np
+
+        from ascii_stream_engine.core.config import EngineConfig
+        from ascii_stream_engine.renderer.ascii import AsciiRenderer
+
+        config = EngineConfig(render_mode="raw", raw_width=20, raw_height=10)
+        renderer = AsciiRenderer()
+        frame = np.zeros((10, 20, 3), dtype=np.uint8)
+        result = renderer.render(frame, config)
+
+        self.assertIsNone(result.text)
+        self.assertIsNone(result.lines)
+        self.assertEqual(result.image.size, (20, 10))
+
 
 if __name__ == "__main__":
     unittest.main()

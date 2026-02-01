@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from typing import Optional
 
 
 @dataclass
@@ -7,6 +8,9 @@ class EngineConfig:
     grid_w: int = 120
     grid_h: int = 60
     charset: str = " .:-=+*#%@"
+    render_mode: str = "ascii"  # "ascii" o "raw"
+    raw_width: Optional[int] = None
+    raw_height: Optional[int] = None
     invert: bool = False
     contrast: float = 1.2
     brightness: int = 0
