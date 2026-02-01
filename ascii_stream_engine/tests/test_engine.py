@@ -38,8 +38,10 @@ class DummySink:
     def __init__(self):
         self.count = 0
         self.output_size = None
+        self.open_calls = 0
 
     def open(self, config, output_size):
+        self.open_calls += 1
         self.output_size = output_size
 
     def write(self, frame):
@@ -95,6 +97,32 @@ class TestStreamEngine(unittest.TestCase):
         analysis = engine.get_last_analysis()
         self.assertIn("dummy", analysis)
         self.assertIn("timestamp", analysis)
+
+    def test_engine_reopens_sink_on_broadcast_change(self) -> None:
+        config = EngineConfig(fps=30, frame_buffer_size=0, sleep_on_empty=0.001)
+        source = DummySource(frame=1)
+        renderer = DummyRenderer()
+        sink = DummySink()
+
+        engine = StreamEngine(
+            source=source,
+            renderer=renderer,
+            sink=sink,
+            config=config,
+            analyzers=AnalyzerPipeline([]),
+            filters=FilterPipeline([]),
+        )
+        engine.start()
+        time.sleep(0.05)
+        initial_opens = sink.open_calls
+        engine.update_config(udp_broadcast=True)
+
+        deadline = time.time() + 0.3
+        while time.time() < deadline and sink.open_calls < initial_opens + 1:
+            time.sleep(0.01)
+
+        engine.stop()
+        self.assertGreaterEqual(sink.open_calls, initial_opens + 1)
 
 
 if __name__ == "__main__":

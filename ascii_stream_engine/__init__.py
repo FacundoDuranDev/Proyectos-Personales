@@ -13,7 +13,7 @@ from .filters import (
 )
 from .renderer import AsciiRenderer, FrameRenderer
 from .outputs import AsciiFrameRecorder, FfmpegUdpOutput, OutputSink
-from .control import build_control_panel
+from .control import build_control_panel, build_general_control_panel
 
 __all__ = [
     "EngineConfig",
@@ -36,4 +36,5 @@ __all__ = [
     "FfmpegUdpOutput",
     "OutputSink",
     "build_control_panel",
+    "build_general_control_panel",
 ]

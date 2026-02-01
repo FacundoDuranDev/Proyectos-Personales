@@ -163,6 +163,7 @@ class StreamEngine:
             cfg.port,
             cfg.pkt_size,
             cfg.bitrate,
+            cfg.udp_broadcast,
         )
 
         last = time.perf_counter()
@@ -190,6 +191,7 @@ class StreamEngine:
                     cfg.port,
                     cfg.pkt_size,
                     cfg.bitrate,
+                    cfg.udp_broadcast,
                 )
                 if desired_signature != sink_signature:
                     self._safe_close_sink()

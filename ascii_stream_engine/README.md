@@ -85,6 +85,15 @@ from ascii_stream_engine import build_control_panel
 build_control_panel(engine)
 ```
 
+Panel general (red, camara, filtros, ASCII/RAW):
+```python
+from ascii_stream_engine import build_general_control_panel
+
+build_general_control_panel(engine)
+```
+
+Notebook general: `ascii_stream_engine/examples/ascii_stream_engine_general.ipynb`
+
 ## Modo RAW (sin ASCII)
 Para enviar imagen sin ASCII, usa `render_mode="raw"`:
 ```python
