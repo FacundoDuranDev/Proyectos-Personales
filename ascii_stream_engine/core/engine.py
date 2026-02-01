@@ -101,10 +101,24 @@ class StreamEngine:
 
     def stop(self) -> None:
         self._stop_event.set()
-        if self._thread:
-            self._thread.join(timeout=2)
+        self._safe_close_source()
+        self._safe_close_sink()
         if self._capture_thread:
             self._capture_thread.join(timeout=2)
+        if self._thread:
+            self._thread.join(timeout=2)
+
+    def _safe_close_source(self) -> None:
+        try:
+            self._source.close()
+        except Exception:
+            pass
+
+    def _safe_close_sink(self) -> None:
+        try:
+            self._sink.close()
+        except Exception:
+            pass
 
     def _start_capture_thread(self, config: EngineConfig) -> None:
         if config.frame_buffer_size <= 0:
@@ -113,7 +127,11 @@ class StreamEngine:
 
         def _capture_loop() -> None:
             while not self._stop_event.is_set():
-                frame = self._source.read()
+                try:
+                    frame = self._source.read()
+                except Exception:
+                    time.sleep(config.sleep_on_empty)
+                    continue
                 if frame is None:
                     time.sleep(config.sleep_on_empty)
                     continue
@@ -182,5 +200,5 @@ class StreamEngine:
                     time.sleep(sleep)
                 last = time.perf_counter()
         finally:
-            self._source.close()
-            self._sink.close()
+            self._safe_close_source()
+            self._safe_close_sink()

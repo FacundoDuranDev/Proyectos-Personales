@@ -22,6 +22,7 @@ class FfmpegUdpOutput:
         self._proc: Optional[subprocess.Popen] = None
 
     def open(self, config: EngineConfig, output_size: Tuple[int, int]) -> None:
+        self.close()
         host = self._host or config.host
         port = self._port or config.port
         pkt_size = self._pkt_size or config.pkt_size
@@ -68,5 +69,13 @@ class FfmpegUdpOutput:
             except Exception:
                 pass
         if self._proc:
-            self._proc.wait()
+            try:
+                self._proc.wait(timeout=1)
+            except subprocess.TimeoutExpired:
+                try:
+                    self._proc.terminate()
+                    self._proc.wait(timeout=1)
+                except subprocess.TimeoutExpired:
+                    self._proc.kill()
+                    self._proc.wait()
             self._proc = None

@@ -42,7 +42,13 @@ class TestFfmpegUdpOutput(unittest.TestCase):
             def close(self):
                 pass
 
-            def wait(self):
+            def wait(self, timeout=None):
+                pass
+
+            def terminate(self):
+                pass
+
+            def kill(self):
                 pass
 
         config = EngineConfig(host="127.0.0.1", port=9999)
