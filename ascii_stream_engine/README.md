@@ -12,7 +12,7 @@ Motor modular para streaming ASCII en tiempo real.
 ## Requisitos
 - Python 3.8+
 - ffmpeg
-- Paquetes: opencv-python, numpy, pillow
+- Paquetes: opencv-python, numpy, pillow, ipywidgets, ipython
 
 Instalacion (ejemplo):
 ```

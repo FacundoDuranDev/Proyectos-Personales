@@ -9,7 +9,8 @@ def build_control_panel(engine: StreamEngine) -> Dict[str, List[object]]:
         from IPython.display import display
     except ImportError as exc:
         raise ImportError(
-            "Instala ipywidgets para usar el panel: python -m pip install ipywidgets"
+            "Instala ipywidgets e ipython para usar el panel: "
+            "python -m pip install ipywidgets ipython"
         ) from exc
 
     cfg = engine.get_config()
