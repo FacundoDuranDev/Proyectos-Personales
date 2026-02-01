@@ -60,6 +60,17 @@ analyzers = AnalyzerPipeline([FaceHaarAnalyzer()])
 ```
 
 ## Control en Jupyter
+Si corres el notebook dentro de `ascii_stream_engine/examples`, agrega el path
+del repo para que Python encuentre el paquete:
+```python
+import os
+import sys
+
+repo_root = os.path.abspath(os.path.join(os.getcwd(), "../.."))
+if repo_root not in sys.path:
+    sys.path.insert(0, repo_root)
+```
+
 ```python
 from ascii_stream_engine import build_control_panel
 
