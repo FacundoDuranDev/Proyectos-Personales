@@ -4,7 +4,13 @@ from .core.pipeline import AnalyzerPipeline, FilterPipeline
 from .core.types import RenderFrame
 from .sources import FrameSource, OpenCVCameraSource
 from .analyzers import BaseAnalyzer, FaceHaarAnalyzer
-from .filters import BaseFilter, BrightnessFilter, EdgeFilter, InvertFilter
+from .filters import (
+    BaseFilter,
+    BrightnessFilter,
+    DetailBoostFilter,
+    EdgeFilter,
+    InvertFilter,
+)
 from .renderer import AsciiRenderer, FrameRenderer
 from .outputs import AsciiFrameRecorder, FfmpegUdpOutput, OutputSink
 from .control import build_control_panel
@@ -21,6 +27,7 @@ __all__ = [
     "FaceHaarAnalyzer",
     "BaseFilter",
     "BrightnessFilter",
+    "DetailBoostFilter",
     "EdgeFilter",
     "InvertFilter",
     "AsciiRenderer",

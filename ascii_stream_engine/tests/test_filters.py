@@ -28,6 +28,16 @@ class TestFilters(unittest.TestCase):
     "requires cv2 and numpy",
 )
 class TestCv2Filters(unittest.TestCase):
+    def test_detail_boost_filter(self) -> None:
+        import numpy as np
+
+        from ascii_stream_engine.filters.detail import DetailBoostFilter
+
+        filt = DetailBoostFilter()
+        frame = np.zeros((10, 10), dtype=np.uint8)
+        result = filt.apply(frame, DummyConfig())
+        self.assertEqual(result.shape, frame.shape)
+
     def test_brightness_filter(self) -> None:
         import numpy as np
 
