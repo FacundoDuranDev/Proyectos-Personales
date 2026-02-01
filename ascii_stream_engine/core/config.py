@@ -1,0 +1,18 @@
+from dataclasses import dataclass
+
+
+@dataclass
+class EngineConfig:
+    fps: int = 20
+    grid_w: int = 120
+    grid_h: int = 60
+    charset: str = " .:-=+*#%@"
+    invert: bool = False
+    contrast: float = 1.2
+    brightness: int = 0
+    host: str = "127.0.0.1"
+    port: int = 1234
+    pkt_size: int = 1316
+    bitrate: str = "1500k"
+    frame_buffer_size: int = 2
+    sleep_on_empty: float = 0.01
