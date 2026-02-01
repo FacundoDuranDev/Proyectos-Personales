@@ -16,7 +16,12 @@ Motor modular para streaming ASCII en tiempo real.
 
 Instalacion (ejemplo):
 ```
-python -m pip install opencv-python numpy pillow ipywidgets
+python -m pip install -r ascii_stream_engine/requirements.txt
+```
+
+Opcional (manos con MediaPipe):
+```
+python -m pip install mediapipe
 ```
 
 ## Ejemplo rapido (UDP + VLC)
